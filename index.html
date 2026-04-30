@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NaturaCorp | Premium Skincare & Herbal Care</title>
+    <style>
+        /* Gaya Dasar & Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f9fbf9; color: #333; line-height: 1.6; }
+        
+        /* Navigasi / Header */
+        header { background: #ffffff; padding: 20px 10%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        header h1 { color: #2c3e50; font-size: 24px; font-weight: bold; }
+        header h1 span { color: #27ae60; }
+        nav a { margin-left: 20px; text-decoration: none; color: #555; font-weight: 500; transition: color 0.3s; }
+        nav a:hover { color: #27ae60; }
+
+        /* Hero Section (Banner Utama) */
+        .hero { text-align: center; padding: 100px 20px; background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=1000&q=80') center/cover; color: white; }
+        .hero h2 { font-size: 40px; margin-bottom: 20px; }
+        .hero p { font-size: 18px; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .btn { background: #27ae60; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background 0.3s; }
+        .btn:hover { background: #219150; }
+
+        /* Bagian Produk */
+        .section-title { text-align: center; padding: 50px 0 20px; color: #2c3e50; font-size: 28px; }
+        .products { display: flex; justify-content: center; gap: 30px; padding: 0 10% 50px; flex-wrap: wrap; }
+        .card { background: white; border-radius: 10px; padding: 20px; width: 300px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-top: 4px solid #27ae60; transition: transform 0.3s; }
+        .card:hover { transform: translateY(-5px); }
+        .card h3 { color: #2c3e50; margin-bottom: 10px; }
+        .card p { color: #666; font-size: 14px; margin-bottom: 20px; }
+        
+        /* Footer */
+        footer { background: #2c3e50; color: #ecf0f1; text-align: center; padding: 20px; font-size: 14px; }
+        
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; }
+            .products { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Natura<span>Corp</span></h1>
+        <nav>
+            <a href="#beranda">Beranda</a>
+            <a href="#produk">Produk Kami</a>
+            <a href="#tentang">Tentang Perusahaan</a>
+            <a href="#kontak">Hubungi Kami</a>
+        </nav>
+    </header>
+
+    <section class="hero" id="beranda">
+        <h2>Inovasi Kesehatan & Kecantikan Natural</h2>
+        <p>Menghadirkan rangkaian produk skincare dan herbal berkualitas tinggi yang diformulasikan secara klinis untuk kesehatan kulit dan tubuh Anda.</p>
+        <a href="#produk" class="btn">Lihat Katalog Produk</a>
+    </section>
+
+    <h2 class="section-title" id="produk">Divisi Produk Kami</h2>
+    <section class="products">
+        <div class="card">
+            <h3>Premium Skincare</h3>
+            <p>Rangkaian perawatan wajah dengan bahan aktif teruji klinis, diformulasikan untuk mencerahkan dan menjaga elastisitas kulit.</p>
+            <a href="#" class="btn">Pesan via WhatsApp</a>
+        </div>
+        <div class="card">
+            <h3>Natural Herbal</h3>
+            <p>Ekstrak tanaman herbal pilihan yang diproses dengan teknologi modern untuk menjaga imunitas dan kesehatan dari dalam.</p>
+            <a href="#" class="btn">Pesan via WhatsApp</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 NaturaCorp. Hak Cipta Dilindungi Undang-Undang.</p>
+        <p>Berkomitmen pada kualitas, integritas, dan inovasi logistik distribusi kesehatan.</p>
+    </footer>
+
+</body>
+</html>
