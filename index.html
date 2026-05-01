@@ -12,15 +12,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Desain Visual & Layout (Point 1 & 2) */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { 
-            background-color: #f8fbf9; 
-            color: #333; 
-            line-height: 1.6;
-            font-family: 'Inter', sans-serif;
-        }
+        body { background-color: #f8fbf9; color: #333; line-height: 1.6; font-family: 'Inter', sans-serif; }
         h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; letter-spacing: -0.5px; }
         
         /* Navigasi */
@@ -47,14 +41,14 @@
         .feature-item h4 { margin-bottom: 12px; font-size: 18px; color: #2c3e50; }
         .feature-item p { font-size: 14px; color: #666; }
 
-        /* Katalog Produk Dinamis */
+        /* Katalog Produk */
         .products { display: flex; justify-content: center; gap: 35px; padding: 0 10% 80px; flex-wrap: wrap; }
-        .card { background: white; border-radius: 15px; padding: 25px; width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border-top: 6px solid #27ae60; transition: 0.4s; }
+        .card { background: white; border-radius: 15px; padding: 25px; width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border-top: 6px solid #27ae60; transition: 0.4s; display: flex; flex-direction: column; }
         .card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
         .card img { width: 100%; height: 220px; object-fit: cover; border-radius: 10px; margin-bottom: 20px; background: #eee; }
-        .price-tag { background: #eef7f1; color: #27ae60; display: inline-block; padding: 6px 18px; border-radius: 20px; font-weight: 700; font-size: 20px; margin-bottom: 15px; }
+        .price-tag { background: #eef7f1; color: #27ae60; display: inline-block; padding: 6px 18px; border-radius: 20px; font-weight: 700; font-size: 20px; margin-bottom: 15px; align-self: flex-start; }
         .card h3 { color: #2c3e50; margin-bottom: 10px; font-size: 22px; }
-        .card p { color: #666; font-size: 14px; margin-bottom: 20px; height: 60px; overflow: hidden; }
+        .card p { color: #666; font-size: 14px; margin-bottom: 20px; flex-grow: 1; }
         
         .spec-table { width: 100%; font-size: 13px; text-align: left; border-collapse: collapse; margin-bottom: 25px; color: #555; }
         .spec-table tr { border-bottom: 1px solid #f0f0f0; }
@@ -62,7 +56,7 @@
         .spec-label { font-weight: 600; color: #2c3e50; width: 40%; }
 
         .btn { background: #27ae60; color: white; padding: 14px 25px; text-decoration: none; border-radius: 8px; font-weight: 600; transition: 0.3s; display: inline-block; text-align: center; }
-        .btn-wa { background: #25D366; width: 100%; }
+        .btn-wa { background: #25D366; width: 100%; margin-top: auto; }
         .btn-wa:hover { background: #1ebe57; transform: scale(1.02); }
 
         /* Tombol WA Melayang */
@@ -122,7 +116,7 @@
 
     <h2 class="section-title" id="produk">Katalog <span>Produk</span></h2>
     <section class="products" id="product-container">
-        <p>Menghubungkan ke pusat data...</p>
+        <p style="font-weight: 600; color: #27ae60;">Sinkronisasi data dengan Google Sheets sedang berjalan...</p>
     </section>
 
     <a href="https://wa.me/62895415028028?text=Halo%20NaturaCorp,%20saya%20ingin%20bertanya%20seputar%20produk%20Anda." target="_blank" class="floating-wa">
@@ -148,37 +142,73 @@
     </footer>
 
     <script>
-        // MASUKKAN LINK CSV PUBLISH TO WEB GOOGLE SHEETS ANDA DI SINI
+        // LINK CSV TERBARU ANDA
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSJ7RDuw8n13jfyQ8Ux7RONBIi8VVjr6i_WN4QcNTtG5D5x2nQyRUWaJZUI7053kf88lEdQ9zXfEnMX/pub?output=csv';
+
+        // Fungsi Cerdas: Ekstrak ID Google Drive jadi Link Gambar Asli
+        function getDriveImageUrl(rawUrl) {
+            if (!rawUrl) return '';
+            const match = rawUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+            }
+            return rawUrl; // Jika bukan link drive, kembalikan apa adanya
+        }
+
+        // Fungsi Cerdas: Format Rupiah (membersihkan huruf/simbol lain otomatis)
+        const formatRupiah = (angka) => {
+            let numberValue = parseInt(angka.replace(/[^0-9]/g, ''), 10);
+            if(isNaN(numberValue)) return "Rp 0"; 
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(numberValue);
+        };
+
+        // Fungsi Cerdas: CSV Parser Anti-Gagal (Membaca koma dengan tepat, mengabaikan spasi/koma dalam teks)
+        function parseCSVData(str) {
+            const arr = [];
+            let quote = false;
+            for (let row = 0, col = 0, c = 0; c < str.length; c++) {
+                let cc = str[c], nc = str[c+1];
+                arr[row] = arr[row] || [];
+                if (cc == '"' && quote && nc == '"') { arr[row][col] += cc; ++c; continue; }
+                if (cc == '"') { quote = !quote; continue; }
+                if (cc == ',' && !quote) { ++col; continue; }
+                if (cc == '\r' && nc == '\n' && !quote) { ++row; col = 0; ++c; continue; }
+                if (cc == '\n' && !quote) { ++row; col = 0; continue; }
+                if (cc == '\r' && !quote) { ++row; col = 0; continue; }
+                arr[row][col] = (arr[row][col] || '') + cc;
+            }
+            return arr;
+        }
 
         async function loadProducts() {
             try {
                 const response = await fetch(sheetUrl);
-                const data = await response.text();
-                const rows = data.split('\n').slice(1); 
+                const textData = await response.text();
+                
+                // Gunakan Parser Super Aman
+                const rows = parseCSVData(textData).slice(1); // Potong baris pertama (Judul Kolom)
                 
                 const container = document.getElementById('product-container');
                 container.innerHTML = ''; 
 
-                rows.forEach(row => {
-                    // Gunakan regex untuk memisahkan koma agar teks di dalam kutipan tidak terpecah
-                    const columns = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
-                    
-                    if (columns.length >= 4) {
-                        const clean = (str) => str ? str.replace(/"/g, '').trim() : '';
+                rows.forEach(columns => {
+                    // Minimal butuh 4 kolom agar tidak error jika ada baris kosong di bawah
+                    if (columns.length >= 4 && columns[0].trim() !== "") {
+                        const nama = columns[0].trim();
+                        const hargaRupiah = formatRupiah(columns[1]);
+                        const deskripsi = columns[2].trim();
                         
-                        const nama = clean(columns[0]);
-                        const harga = clean(columns[1]);
-                        const deskripsi = clean(columns[2]);
-                        const foto = clean(columns[3]);
-                        const s1 = clean(columns[4]);
-                        const s2 = clean(columns[5]);
-                        const s3 = clean(columns[6]);
+                        // Konversi Link GDrive langsung secara sistem
+                        const fotoAsli = getDriveImageUrl(columns[3].trim()); 
+                        
+                        const s1 = (columns[4] || "").trim();
+                        const s2 = (columns[5] || "").trim();
+                        const s3 = (columns[6] || "").trim();
 
                         const cardHTML = `
                             <div class="card">
-                                <img src="${foto}" alt="${nama}" onerror="this.src='https://via.placeholder.com/350x220?text=Foto+Produk'">
-                                <div class="price-tag">${harga}</div>
+                                <img src="${fotoAsli}" alt="${nama}" onerror="this.src='https://via.placeholder.com/350x220?text=Foto+Produk+Belum+Tersedia'">
+                                <div class="price-tag">${hargaRupiah}</div>
                                 <h3>${nama}</h3>
                                 <p>${deskripsi}</p>
                                 <table class="spec-table">
@@ -186,7 +216,7 @@
                                     <tr><td class="spec-label">Sifat/Jenis</td><td>: ${s2}</td></tr>
                                     <tr><td class="spec-label">Komposisi</td><td>: ${s3}</td></tr>
                                 </table>
-                                <a href="https://wa.me/62895415028028?text=Halo%20NaturaCorp,%20saya%20tertarik%20dengan%20*${nama}*%20harga%20${harga}.%20Bisa%20dibantu%20prosesnya?" target="_blank" class="btn btn-wa">
+                                <a href="https://wa.me/62895415028028?text=Halo%20NaturaCorp,%20saya%20tertarik%20dengan%20*${nama}*%20harga%20${hargaRupiah}.%20Bisa%20dibantu%20prosesnya?" target="_blank" class="btn btn-wa">
                                     <i class="fa-brands fa-whatsapp"></i> Pesan Sekarang
                                 </a>
                             </div>
@@ -195,11 +225,12 @@
                     }
                 });
             } catch (e) {
-                document.getElementById('product-container').innerHTML = '<p>Katalog sedang diperbarui, silakan cek kembali nanti.</p>';
+                console.error("Error loading data:", e);
+                document.getElementById('product-container').innerHTML = '<p style="color:red;">Koneksi ke server data gagal. Silakan muat ulang halaman.</p>';
             }
         }
 
         loadProducts();
     </script>
 </body>
-</htm l>
+</html>
