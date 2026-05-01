@@ -3,64 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NaturaCorp | Premium Skincare & Herbal Care</title>
-    <!-- FontAwesome untuk Ikon -->
+    <title>NaturaCorp | Skincare & Herbal Berkualitas</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         /* Gaya Dasar & Reset */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { background-color: #f8fbf9; color: #333; line-height: 1.6; }
+        body { 
+            background-color: #f8fbf9; /* Abu-abu sangat muda bernuansa dingin */
+            color: #333; 
+            line-height: 1.6;
+            font-family: 'Inter', sans-serif; /* Font teks paragraf */
+        }
+        h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; /* Font judul */ }
         
         /* Navigasi / Header */
-        header { background: #ffffff; padding: 15px 10%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 1000; }
-        header h1 { color: #2c3e50; font-size: 26px; font-weight: 800; letter-spacing: 1px; }
+        header { background: #ffffff; padding: 15px 10%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        header h1 { color: #2c3e50; font-size: 26px; font-weight: 700; letter-spacing: 0.5px; }
         header h1 span { color: #27ae60; }
-        nav a { margin-left: 25px; text-decoration: none; color: #555; font-weight: 600; font-size: 15px; transition: color 0.3s; }
+        nav a { margin-left: 25px; text-decoration: none; color: #555; font-weight: 500; font-size: 15px; transition: color 0.3s; }
         nav a:hover { color: #27ae60; }
 
         /* Hero Section (Banner Utama) */
-        .hero { text-align: center; padding: 120px 20px; background: linear-gradient(rgba(30, 48, 66, 0.85), rgba(30, 48, 66, 0.85)), url('https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=1200&q=80') center/cover; color: white; }
-        .hero h2 { font-size: 46px; margin-bottom: 20px; font-weight: 700; letter-spacing: 1px; }
-        .hero p { font-size: 18px; margin-bottom: 40px; max-width: 650px; margin-left: auto; margin-right: auto; color: #ecf0f1; }
-        .btn { background: #27ae60; color: white; padding: 14px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px; transition: all 0.3s; display: inline-block; }
+        .hero { text-align: center; padding: 120px 20px; background: linear-gradient(rgba(30, 48, 66, 0.8), rgba(30, 48, 66, 0.8)), url('https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=1200&q=80') center/cover; color: white; }
+        .hero h2 { font-size: 42px; margin-bottom: 20px; font-weight: 700; }
+        .hero p { font-size: 18px; margin-bottom: 40px; max-width: 650px; margin-left: auto; margin-right: auto; color: #e0e6ed; }
+        .btn { background: #27ae60; color: white; padding: 14px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px; transition: all 0.3s; display: inline-block; }
         .btn:hover { background: #219150; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3); }
 
         /* Judul Seksi */
-        .section-title { text-align: center; padding: 70px 0 40px; color: #2c3e50; font-size: 32px; font-weight: 700; }
+        .section-title { text-align: center; padding: 70px 0 40px; color: #2c3e50; font-size: 30px; font-weight: 700; }
         .section-title span { color: #27ae60; }
 
         /* Keunggulan Kami */
-        .features { display: flex; justify-content: center; gap: 40px; padding: 0 10% 40px; flex-wrap: wrap; background: #ffffff; }
-        .feature-item { text-align: center; max-width: 280px; padding: 20px; }
-        .feature-item i { font-size: 40px; color: #27ae60; margin-bottom: 15px; }
+        .features { display: flex; justify-content: center; gap: 40px; padding: 0 10% 40px; flex-wrap: wrap; }
+        .feature-item { text-align: center; max-width: 280px; padding: 20px; background: #ffffff; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .feature-item i { font-size: 35px; color: #27ae60; margin-bottom: 15px; }
         .feature-item h4 { color: #2c3e50; font-size: 18px; margin-bottom: 10px; }
         .feature-item p { color: #666; font-size: 14px; }
 
         /* Bagian Produk */
         .products { display: flex; justify-content: center; gap: 40px; padding: 0 10% 80px; flex-wrap: wrap; }
-        .card { background: white; border-radius: 12px; padding: 30px; width: 340px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.06); border-top: 5px solid #27ae60; transition: transform 0.3s, box-shadow 0.3s; }
+        .card { background: white; border-radius: 12px; padding: 30px; width: 340px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border-top: 5px solid #27ae60; transition: transform 0.3s, box-shadow 0.3s; }
         .card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.1); }
-        .card i { font-size: 50px; color: #2c3e50; margin-bottom: 20px; }
-        .card h3 { color: #2c3e50; margin-bottom: 15px; font-size: 22px; }
-        .card p { color: #666; font-size: 15px; margin-bottom: 25px; line-height: 1.7; height: 75px; }
+        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; }
+        .card h3 { color: #2c3e50; margin-bottom: 10px; font-size: 20px; }
+        .card p { color: #666; font-size: 14px; margin-bottom: 25px; line-height: 1.6; height: 65px; }
         .btn-wa { background: #25D366; width: 100%; display: block; }
         .btn-wa:hover { background: #1ebe57; }
 
+        /* Tombol WA Melayang */
+        .floating-wa { position: fixed; bottom: 30px; right: 30px; background-color: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); z-index: 1000; transition: transform 0.3s; text-decoration: none; }
+        .floating-wa:hover { transform: scale(1.1); }
+
         /* Footer */
-        footer { background: #1a252f; color: #bdc3c7; text-align: center; padding: 40px 20px 20px; }
-        .footer-content { display: flex; justify-content: center; gap: 50px; margin-bottom: 30px; flex-wrap: wrap; }
+        footer { background: #1a252f; color: #bdc3c7; text-align: center; padding: 50px 20px 20px; }
+        .footer-content { display: flex; justify-content: center; gap: 60px; margin-bottom: 30px; flex-wrap: wrap; }
         .footer-col { max-width: 300px; text-align: left; }
-        .footer-col h4 { color: #ffffff; margin-bottom: 15px; font-size: 18px; }
-        .footer-col p { font-size: 14px; margin-bottom: 10px; }
+        .footer-col h4 { color: #ffffff; margin-bottom: 15px; font-size: 16px; letter-spacing: 0.5px; }
+        .footer-col p { font-size: 14px; margin-bottom: 10px; color: #aeb6bf; }
         .footer-bottom { border-top: 1px solid #2c3e50; padding-top: 20px; font-size: 13px; }
         
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; padding: 20px; }
-            nav a { margin: 0 10px; }
+            nav a { margin: 0 10px; font-size: 14px; }
             .hero h2 { font-size: 32px; }
-            .footer-content { flex-direction: column; align-items: center; text-align: center; }
+            .footer-content { flex-direction: column; align-items: center; text-align: center; gap: 30px; }
             .footer-col { text-align: center; }
+            .floating-wa { bottom: 20px; right: 20px; width: 55px; height: 55px; font-size: 30px; }
         }
     </style>
 </head>
@@ -71,14 +87,14 @@
         <nav>
             <a href="#beranda">Beranda</a>
             <a href="#keunggulan">Profil</a>
-            <a href="#produk">Katalog Produk</a>
+            <a href="#produk">Katalog</a>
         </nav>
     </header>
 
     <section class="hero" id="beranda">
-        <h2>Inovasi Kesehatan & Kecantikan Natural</h2>
-        <p>Mendedikasikan riset dan teknologi untuk menghadirkan rangkaian produk skincare dan herbal berkualitas tinggi yang aman, bersertifikasi, dan teruji klinis.</p>
-        <a href="#produk" class="btn">Jelajahi Produk Kami</a>
+        <h2>Kebaikan Alam untuk Perawatan Anda</h2>
+        <p>Menghadirkan produk skincare dan herbal yang diproses dengan higienis menggunakan bahan-bahan natural pilihan terbaik.</p>
+        <a href="#produk" class="btn">Lihat Katalog Kami</a>
     </section>
 
     <h2 class="section-title" id="keunggulan">Mengapa <span>NaturaCorp?</span></h2>
@@ -86,49 +102,51 @@
         <div class="feature-item">
             <i class="fa-solid fa-leaf"></i>
             <h4>Bahan Baku Natural</h4>
-            <p>Diformulasikan dari ekstrak herbal dan bahan aktif pilihan yang terbukti aman bagi kesehatan tubuh dan kulit.</p>
+            <p>Menggunakan ekstrak tanaman herbal dan bahan baku pilihan yang terbukti memberikan manfaat baik bagi tubuh.</p>
         </div>
         <div class="feature-item">
-            <i class="fa-solid fa-flask-vial"></i>
-            <h4>Teruji Klinis</h4>
-            <p>Setiap produk melewati uji lab yang ketat dan standar BPOM untuk memastikan kualitas serta khasiat yang optimal.</p>
+            <i class="fa-solid fa-hands-bubbles"></i>
+            <h4>Proses Higienis</h4>
+            <p>Diproduksi dengan standar kebersihan tinggi untuk memastikan kualitas dan keamanan produk tetap terjaga.</p>
         </div>
         <div class="feature-item">
-            <i class="fa-solid fa-truck-fast"></i>
+            <i class="fa-solid fa-boxes-packing"></i>
             <h4>Distribusi Andal</h4>
-            <p>Manajemen operasional dan rute pengiriman yang terintegrasi memastikan produk sampai ke tangan Anda dengan cepat dan kondisi sempurna.</p>
+            <p>Sistem manajemen pengemasan dan logistik yang terstruktur memastikan produk sampai dengan aman ke tangan Anda.</p>
         </div>
     </section>
 
     <h2 class="section-title" id="produk">Divisi <span>Produk</span></h2>
     <section class="products">
         <div class="card">
-            <i class="fa-solid fa-spa"></i>
+            <img src="https://images.unsplash.com/photo-1608248593802-808ca11283cd?auto=format&fit=crop&w=500&q=80" alt="Produk Skincare">
             <h3>Premium Skincare</h3>
-            <p>Perawatan wajah komprehensif untuk mencerahkan, meremajakan, dan menjaga kelembapan kulit secara alami.</p>
-            <!-- Ganti 6281234567890 dengan nomor WA Anda -->
-            <a href="https://wa.me/62895415028028?text=Halo%20Tim%20NaturaCorp,%20saya%20tertarik%20dengan%20produk%20*Premium%20Skincare*.%20Boleh%20minta%20katalog%20dan%20informasi%20harganya?" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i> Pesan Sekarang</a>
+            <p>Rangkaian perawatan kulit harian untuk menjaga kelembapan dan menutrisi wajah secara optimal.</p>
+            <a href="https://wa.me/6281234567890?text=Halo%20Tim%20NaturaCorp,%20saya%20tertarik%20dengan%20produk%20*Premium%20Skincare*.%20Bisa%20minta%20info%20harganya?" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i> Pesan Sekarang</a>
         </div>
         <div class="card">
-            <i class="fa-solid fa-mortar-pestle"></i>
+            <img src="https://images.unsplash.com/photo-1615486171448-4af383b484ee?auto=format&fit=crop&w=500&q=80" alt="Produk Herbal">
             <h3>Natural Herbal</h3>
-            <p>Suplemen dan racikan herbal modern untuk menjaga imunitas, vitalitas, dan kesehatan esensial dari dalam tubuh.</p>
-            <!-- Ganti 6281234567890 dengan nomor WA Anda -->
-            <a href="https://wa.me/62895415028028?text=Halo%20Tim%20NaturaCorp,%20saya%20ingin%20berkonsultasi%20dan%20memesan%20produk%20*Natural%20Herbal*.%20Bagaimana%20prosedurnya?" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i> Pesan Sekarang</a>
+            <p>Minuman dan racikan herbal yang diformulasikan untuk membantu menjaga daya tahan tubuh Anda setiap hari.</p>
+            <a href="https://wa.me/6281234567890?text=Halo%20Tim%20NaturaCorp,%20saya%20ingin%20memesan%20produk%20*Natural%20Herbal*.%20Bagaimana%20prosedurnya?" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i> Pesan Sekarang</a>
         </div>
     </section>
+
+    <a href="https://wa.me/6281234567890?text=Halo%20NaturaCorp,%20saya%20ingin%20bertanya%20seputar%20produk%20Anda." target="_blank" class="floating-wa">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
 
     <footer>
         <div class="footer-content">
             <div class="footer-col">
                 <h4>NaturaCorp Head Office</h4>
-                <p><i class="fa-solid fa-building"></i> Gedung Natura, Lantai 3</p>
                 <p><i class="fa-solid fa-map-location-dot"></i> Jawa Tengah, Indonesia</p>
+                <p><i class="fa-solid fa-truck-fast"></i> Pengiriman ke Seluruh Indonesia</p>
             </div>
             <div class="footer-col">
                 <h4>Layanan Pelanggan</h4>
-                <p><i class="fa-solid fa-envelope"></i> corporate@naturacorp.com</p>
-                <p><i class="fa-solid fa-headset"></i> Operasional: Senin - Sabtu (08.00 - 16.00 WIB)</p>
+                <p><i class="fa-solid fa-envelope"></i> admin@naturacorp.com</p>
+                <p><i class="fa-solid fa-headset"></i> Senin - Sabtu (08.00 - 16.00 WIB)</p>
             </div>
         </div>
         <div class="footer-bottom">
