@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Desain Visual & Layout */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body { background-color: #f8fbf9; color: #333; line-height: 1.6; font-family: 'Inter', sans-serif; }
@@ -49,7 +48,7 @@
         .card img { width: 100%; height: 220px; object-fit: cover; border-radius: 10px; margin-bottom: 20px; background: #eee; }
         .price-tag { background: #eef7f1; color: #27ae60; display: inline-block; padding: 6px 18px; border-radius: 20px; font-weight: 700; font-size: 20px; margin-bottom: 15px; align-self: flex-start; }
         .card h3 { color: #2c3e50; margin-bottom: 10px; font-size: 22px; }
-        .card p { color: #666; font-size: 14px; margin-bottom: 20px; flex-grow: 1; overflow: hidden; }
+        .card p { color: #666; font-size: 14px; margin-bottom: 20px; flex-grow: 1; }
         
         .spec-table { width: 100%; font-size: 13px; text-align: left; border-collapse: collapse; margin-bottom: 25px; color: #555; }
         .spec-table tr { border-bottom: 1px solid #f0f0f0; }
@@ -143,8 +142,8 @@
     </footer>
 
     <script>
-        // Link CSV Tervalidasi
-        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSJ7RDuw8n13jfyQ8Ux7RONBIi8VVjr6i_WN4QcNTtG5D5x2nQyRUWaJZUI7053kf88lEdQ9zXfEnMX/pub?output=csv';
+        // MASUKKAN LINK CSV PUBLISH TO WEB GOOGLE SHEETS ANDA DI SINI
+        const sheetUrl = 'MASUKKAN_LINK_CSV_PUBLISH_TO_WEB_ANDA_DI_SINI';
 
         // 1. Ekstraktor Gambar Google Drive Ampuh
         function getDriveImageUrl(rawUrl) {
@@ -190,28 +189,22 @@
 
         // 4. Proses Eksekusi Data Utama
         async function loadProducts() {
-            const container = document.getElementById('product-container');
-            
             try {
                 const response = await fetch(sheetUrl);
-                if (!response.ok) throw new Error("Gagal mengambil data dari Google Sheets.");
                 const textData = await response.text();
                 
                 // Gunakan parser CSV yang sudah disempurnakan
                 const rows = parseCSVData(textData).slice(1); // Potong judul kolom
                 
+                const container = document.getElementById('product-container');
                 container.innerHTML = ''; 
-                let adaProduk = false;
 
                 rows.forEach(columns => {
-                    // Validasi: Baris harus memiliki minimal 1 kolom dan Nama tidak boleh kosong
-                    if (columns.length > 0 && columns[0] && columns[0].trim() !== "") {
-                        adaProduk = true;
-                        
-                        // Ekstraksi Kolom (Mencegah undefined)
+                    // Validasi: Baris harus memiliki minimal 4 kolom dan Nama tidak boleh kosong
+                    if (columns.length >= 4 && columns[0] && columns[0].trim() !== "") {
                         const nama = columns[0].trim();
-                        const hargaMentah = columns[1] ? columns[1].trim() : "0";
-                        const hargaRupiah = formatRupiah(hargaMentah);
+                        const hargaRaw = columns[1] ? columns[1].trim() : "0";
+                        const hargaRupiah = formatRupiah(hargaRaw);
                         const deskripsi = columns[2] ? columns[2].trim() : "-";
                         
                         // Eksekusi Gambar G-Drive
@@ -225,7 +218,7 @@
                         // Template HTML untuk Produk
                         const cardHTML = `
                             <div class="card">
-                                <img src="${fotoAsli}" alt="${nama}" loading="lazy" onerror="this.onerror=null; this.src='https://via.placeholder.com/350x220?text=Foto+G-Drive+Belum+Publik'">
+                                <img src="${fotoAsli}" alt="${nama}" onerror="this.src='https://via.placeholder.com/350x220?text=Foto+G-Drive+Belum+Publik'">
                                 <div class="price-tag">${hargaRupiah}</div>
                                 <h3>${nama}</h3>
                                 <p>${deskripsi}</p>
@@ -243,13 +236,9 @@
                     }
                 });
 
-                if (!adaProduk) {
-                    container.innerHTML = '<p style="text-align:center; width:100%; color:#555;">Katalog produk belum diisi di Google Sheets.</p>';
-                }
-
             } catch (e) {
                 console.error("Sistem Log Error:", e);
-                container.innerHTML = '<p style="color:red; text-align:center; width:100%; font-weight:bold;">Terjadi kendala jaringan saat menarik data. Silakan muat ulang (refresh) halaman ini.</p>';
+                document.getElementById('product-container').innerHTML = '<p style="color:red; text-align:center; width:100%;">Terjadi kendala jaringan saat menarik data. Silakan muat ulang (refresh) halaman ini.</p>';
             }
         }
 
