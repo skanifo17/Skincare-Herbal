@@ -48,7 +48,7 @@
         .card img { width: 100%; height: 220px; object-fit: cover; border-radius: 10px; margin-bottom: 20px; background: #eee; }
         .price-tag { background: #eef7f1; color: #27ae60; display: inline-block; padding: 6px 18px; border-radius: 20px; font-weight: 700; font-size: 20px; margin-bottom: 15px; align-self: flex-start; }
         .card h3 { color: #2c3e50; margin-bottom: 10px; font-size: 22px; }
-        .card p { color: #666; font-size: 14px; margin-bottom: 20px; flex-grow: 1; }
+        .card p { color: #666; font-size: 14px; margin-bottom: 20px; flex-grow: 1; height: 60px; overflow: hidden; }
         
         .spec-table { width: 100%; font-size: 13px; text-align: left; border-collapse: collapse; margin-bottom: 25px; color: #555; }
         .spec-table tr { border-bottom: 1px solid #f0f0f0; }
@@ -116,7 +116,7 @@
 
     <h2 class="section-title" id="produk">Katalog <span>Produk</span></h2>
     <section class="products" id="product-container">
-        <p style="font-weight: 600; color: #27ae60;">Sinkronisasi data dengan Google Sheets sedang berjalan...</p>
+        <p style="font-weight: 600; color: #27ae60;">Sedang menghubungkan ke pusat data NaturaCorp...</p>
     </section>
 
     <a href="https://wa.me/62895415028028?text=Halo%20NaturaCorp,%20saya%20ingin%20bertanya%20seputar%20produk%20Anda." target="_blank" class="floating-wa">
@@ -142,27 +142,31 @@
     </footer>
 
     <script>
-        // LINK CSV TERBARU ANDA
+        // LINK CSV ANDA (Sudah terpasang)
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSJ7RDuw8n13jfyQ8Ux7RONBIi8VVjr6i_WN4QcNTtG5D5x2nQyRUWaJZUI7053kf88lEdQ9zXfEnMX/pub?output=csv';
 
-        // Fungsi Cerdas: Ekstrak ID Google Drive jadi Link Gambar Asli
+        // Fungsi Super Cerdas: Mengubah segala jenis link Google Drive jadi Direct Image Link CDN
         function getDriveImageUrl(rawUrl) {
-            if (!rawUrl) return '';
+            if (!rawUrl || typeof rawUrl !== 'string') return '';
+            
+            // Regex universal untuk menangkap ID File dari berbagai format link bagikan Drive
             const match = rawUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
             if (match && match[1]) {
-                return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+                // Gunakan endpoint CDN khusus gambar milik Google (lebih stabil dari uc?id=)
+                return `https://lh3.googleusercontent.com/d/${match[1]}`;
             }
-            return rawUrl; // Jika bukan link drive, kembalikan apa adanya
+            return rawUrl.trim(); // Kembalikan apa adanya jika bukan link Drive
         }
 
-        // Fungsi Cerdas: Format Rupiah (membersihkan huruf/simbol lain otomatis)
+        // Fungsi Cerdas: Format Rupiah Cepat
         const formatRupiah = (angka) => {
-            let numberValue = parseInt(angka.replace(/[^0-9]/g, ''), 10);
-            if(isNaN(numberValue)) return "Rp 0"; 
+            if (!angka) return "Rp 0";
+            let numberValue = parseInt(angka.toString().replace(/[^0-9]/g, ''), 10);
+            if(isNaN(numberValue)) return angka; 
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(numberValue);
         };
 
-        // Fungsi Cerdas: CSV Parser Anti-Gagal (Membaca koma dengan tepat, mengabaikan spasi/koma dalam teks)
+        // Fungsi Cerdas: CSV Parser (Anti Gagal Sinkron)
         function parseCSVData(str) {
             const arr = [];
             let quote = false;
@@ -183,6 +187,7 @@
         async function loadProducts() {
             try {
                 const response = await fetch(sheetUrl);
+                if (!response.ok) throw new Error("Gagal fetch data");
                 const textData = await response.text();
                 
                 // Gunakan Parser Super Aman
@@ -191,23 +196,29 @@
                 const container = document.getElementById('product-container');
                 container.innerHTML = ''; 
 
-                rows.forEach(columns => {
-                    // Minimal butuh 4 kolom agar tidak error jika ada baris kosong di bawah
-                    if (columns.length >= 4 && columns[0].trim() !== "") {
+                rows.forEach((columns, index) => {
+                    // Minimal butuh 4 kolom agar tidak error (Nama, Harga, Deskripsi, Foto)
+                    if (columns.length >= 4 && columns[0] && columns[0].trim() !== "") {
                         const nama = columns[0].trim();
-                        const hargaRupiah = formatRupiah(columns[1]);
-                        const deskripsi = columns[2].trim();
                         
-                        // Konversi Link GDrive langsung secara sistem
-                        const fotoAsli = getDriveImageUrl(columns[3].trim()); 
+                        // Gunakan Harga mentah dari Gsheet (Rp200.000) - Fungsi formatRupiah akan membersihkannya
+                        const hargaRaw = columns[1] ? columns[1].trim() : "0";
+                        const hargaRupiah = formatRupiah(hargaRaw);
                         
-                        const s1 = (columns[4] || "").trim();
-                        const s2 = (columns[5] || "").trim();
-                        const s3 = (columns[6] || "").trim();
+                        const deskripsi = columns[2] ? columns[2].trim() : "Deskripsi tidak tersedia";
+                        
+                        // Perbaikan Cerdas Pembaca Foto Drive
+                        const fotoMentah = columns[3] ? columns[3].trim() : "";
+                        const fotoAsli = getDriveImageUrl(fotoMentah); 
+                        
+                        // Spesifikasi (Kolom E, F, G)
+                        const s1 = columns[4] ? columns[4].trim() : "-";
+                        const s2 = columns[5] ? columns[5].trim() : "-";
+                        const s3 = columns[6] ? columns[6].trim() : "-";
 
                         const cardHTML = `
                             <div class="card">
-                                <img src="${fotoAsli}" alt="${nama}" onerror="this.src='https://via.placeholder.com/350x220?text=Foto+Produk+Belum+Tersedia'">
+                                <img src="${fotoAsli}" alt="${nama}" loading="lazy" onerror="this.onerror=null; this.src='https://via.placeholder.com/350x220?text=Foto+G-Drive+Belum+Publik'">
                                 <div class="price-tag">${hargaRupiah}</div>
                                 <h3>${nama}</h3>
                                 <p>${deskripsi}</p>
@@ -224,13 +235,20 @@
                         container.innerHTML += cardHTML;
                     }
                 });
+
+                // Jika katalog kosong
+                if (container.innerHTML === '') {
+                    container.innerHTML = '<p style="text-align:center; width:100%;">Katalog produk sedang dalam pembaruan.</p>';
+                }
+
             } catch (e) {
                 console.error("Error loading data:", e);
-                document.getElementById('product-container').innerHTML = '<p style="color:red;">Koneksi ke server data gagal. Silakan muat ulang halaman.</p>';
+                document.getElementById('product-container').innerHTML = '<p style="color:red; text-align:center; width:100%;">Gagal menghubungkan ke server pusat data G-Sheets. Silakan muat ulang halaman.</p>';
             }
         }
 
-        loadProducts();
+        // Jalankan fungsi load data saat halaman siap
+        window.addEventListener('DOMContentLoaded', loadProducts);
     </script>
 </body>
 </html>
